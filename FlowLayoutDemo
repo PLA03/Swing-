@@ -1,0 +1,81 @@
+package com.edu.flowLayout;
+
+import java.awt.BorderLayout;
+import java.awt.ComponentOrientation;
+import java.awt.FlowLayout;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.SwingUtilities;
+
+public class FlowLayoutDemo extends JFrame{
+
+	JRadioButton RtoLbutton;
+	JRadioButton LtoRbutton;
+	FlowLayout experimentLayout = new FlowLayout();
+	final String LTOR = "Left to right";
+	final String RTOL = "Right to Left";
+	JButton applyButton = new JButton("Apply component orientation");
+	
+	public FlowLayoutDemo(String name){
+		super(name);
+	}
+	public void addComponentsToPane(){
+		JPanel compsToExperiment = new JPanel();
+		experimentLayout.setAlignment(FlowLayout.TRAILING);
+		compsToExperiment.setLayout(experimentLayout);
+		
+		//Add buttons to the experiment layout
+        compsToExperiment.add(new JButton("Button 1"));
+        compsToExperiment.add(new JButton("Button 2"));
+        compsToExperiment.add(new JButton("Button 3"));
+        compsToExperiment.add(new JButton("Long-Named Button 4"));
+        compsToExperiment.add(new JButton("5"));
+		compsToExperiment.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		JPanel controls = new JPanel();
+		
+		RtoLbutton = new JRadioButton(RTOL);
+		RtoLbutton.setActionCommand(LTOR);
+		LtoRbutton = new JRadioButton(LTOR);
+		LtoRbutton.setActionCommand(RTOL);
+		
+		ButtonGroup group = new ButtonGroup();
+		group.add(RtoLbutton);
+		group.add(LtoRbutton);
+		controls.add(LtoRbutton);
+		controls.add(RtoLbutton);
+		controls.add(applyButton);
+		
+		applyButton.addActionListener((e)->{
+			String command = group.getSelection().getActionCommand();
+			 //Check the selection
+            if (command.equals("Left to right")) {
+                compsToExperiment.setComponentOrientation(
+                        ComponentOrientation.LEFT_TO_RIGHT);
+            } else {
+                compsToExperiment.setComponentOrientation(
+                        ComponentOrientation.RIGHT_TO_LEFT);
+            }
+            //update the experiment layout
+            compsToExperiment.validate();
+            compsToExperiment.repaint();
+		});
+		add(compsToExperiment,BorderLayout.CENTER);
+		add(controls, BorderLayout.SOUTH);
+	}
+	public static void createAndShowGUI(){
+		FlowLayoutDemo flowLayoutDemo = new FlowLayoutDemo("FlowLayoutDemo");
+		flowLayoutDemo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		flowLayoutDemo.addComponentsToPane();
+		flowLayoutDemo.pack();
+		flowLayoutDemo.setVisible(true);
+	}
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(()->{
+			createAndShowGUI();
+		});
+	}
+}
